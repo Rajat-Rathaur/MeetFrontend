@@ -1,8 +1,10 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, InputBase, Button, Avatar, IconButton } from '@mui/material';
+
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import { Menu, MenuItem } from '@mui/material';
+import { AppBar, Toolbar, Typography, InputBase, Button, Avatar, IconButton, Popover } from '@mui/material';
+
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -17,13 +19,30 @@ const Navbar = () => {
 
   const [profileAnchorEl, setProfileAnchorEl] = React.useState(null);
 
-const handleProfileOpen = (event) => {
-  setProfileAnchorEl(event.currentTarget);
-};
+  const handleProfileOpen = (event) => {
+    setProfileAnchorEl(event.currentTarget);
+  };
 
-const handleProfileClose = () => {
-  setProfileAnchorEl(null);
-};
+  const handleProfileClose = () => {
+    setProfileAnchorEl(null);
+  };
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatarSrc(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleImageRemove = () => {
+    setAvatarSrc("");  // or set to a default image if you have one
+  };
+  const [avatarSrc, setAvatarSrc] = React.useState("/static/images/avatar/1.jpg");
+  const fileInputRef = React.useRef(null);
 
 
   return (
@@ -47,8 +66,48 @@ const handleProfileClose = () => {
         </div>
 
         <Button color="inherit" sx={{ ml: 1 }}>Meetings</Button>
-        <Avatar alt="Profile Picture" src="/static/images/avatar/1.jpg" sx={{ ml: 2 }} />
-        
+        <Avatar
+          alt="Profile Picture"
+          src="/static/images/avatar/1.jpg"
+          sx={{ ml: 2, cursor: 'pointer' }}
+          onClick={handleProfileOpen}
+        />
+        <Popover
+          open={Boolean(profileAnchorEl)}
+          anchorEl={profileAnchorEl}
+          onClose={handleProfileClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+        >
+          <div sx={{ padding: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Avatar
+              alt="Profile Picture"
+              src={avatarSrc}
+              sx={{ ml: 2, cursor: 'pointer' }}
+              onClick={handleProfileOpen}
+            />
+
+            <Button color="primary" onClick={() => fileInputRef.current.click()}>
+              Change Profile Picture
+            </Button>
+
+
+            <Button
+              color="error"
+              onClick={handleImageRemove}
+            >
+              Remove Profile Picture
+            </Button>
+
+          </div>
+        </Popover>
+
         <Typography
           variant="subtitle1"
           sx={{ ml: 1, cursor: 'pointer' }}
@@ -68,6 +127,14 @@ const handleProfileClose = () => {
           <MenuItem onClick={handleMenuClose}>Help</MenuItem>
           <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
         </Menu>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          style={{ display: 'none' }}
+          ref={fileInputRef}
+        />
+
 
       </Toolbar>
     </AppBar>
