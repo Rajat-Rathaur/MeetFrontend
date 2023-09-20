@@ -2,8 +2,19 @@ import React from 'react';
 import { AppBar, Toolbar, Typography, InputBase, Button, Avatar, IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
+import { Menu, MenuItem } from '@mui/material';
 
 const Navbar = () => {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+const handleMenuOpen = (event) => {
+  setAnchorEl(event.currentTarget);
+};
+
+const handleMenuClose = () => {
+  setAnchorEl(null);
+};
+
   return (
     <AppBar position="static" sx={{ mb: 4 }}>
       <Toolbar>
