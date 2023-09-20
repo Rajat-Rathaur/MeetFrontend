@@ -12,6 +12,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Snackbar,
 } from '@mui/material';
 import Navbar from '../Components/Navbar';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -26,6 +27,9 @@ import Footer from '../Components/Footer';
 
 const Home = () => {
   const [isJoinDialogOpen, setIsJoinDialogOpen] = useState(false);
+  const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+  const [copiedLink, setCopiedLink] = useState('');
 
   const openJoinDialog = () => {
     setIsJoinDialogOpen(true);
@@ -33,6 +37,22 @@ const Home = () => {
 
   const closeJoinDialog = () => {
     setIsJoinDialogOpen(false);
+  };
+
+  const openCopyDialog = () => {
+    setIsCopyDialogOpen(true);
+  };
+
+  const closeCopyDialog = () => {
+    setIsCopyDialogOpen(false);
+  };
+
+  const copyLinkToClipboard = () => {
+    const linkToCopy = 'https://example.com'; 
+    navigator.clipboard.writeText(linkToCopy).then(() => {
+      setCopiedLink(linkToCopy);
+      setIsSnackbarOpen(true);
+    });
   };
 
   return (
@@ -51,7 +71,7 @@ const Home = () => {
           sx={{
             display: 'grid',
             gridTemplateColumns: 'repeat(2, 1fr)',
-            gap: '20px', // Increased space between buttons
+            gap: '20px', 
             padding: '20px',
             borderRadius: '15px',
             background: 'white',
@@ -71,6 +91,7 @@ const Home = () => {
                   marginLeft: '0.5vh',
                   marginRight: '0.5vh',
                 }}
+                onClick={openCopyDialog}
               >
                 Start
               </Button>
@@ -102,7 +123,7 @@ const Home = () => {
                   marginLeft: '0.5vh',
                   marginRight: '0.5vh',
                 }}
-                onClick={openJoinDialog} // Open the Join dialog on button click
+                onClick={openJoinDialog}
               >
                 Join
               </Button>
@@ -125,12 +146,10 @@ const Home = () => {
         </div>
       </div>
 
+  
       <Dialog open={isJoinDialogOpen} onClose={closeJoinDialog}>
         <DialogTitle>Join Meeting</DialogTitle>
-      
         <DialogContent>
-                        {/* 
-          join box */}
           <Typography>Enter Meeting ID:</Typography>
           <InputBase placeholder="Meeting ID" />
         </DialogContent>
@@ -143,6 +162,28 @@ const Home = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+  
+      <Dialog open={isCopyDialogOpen} onClose={closeCopyDialog}>
+        <DialogTitle>Copy Link to Clipboard</DialogTitle>
+        <DialogContent>
+          <Button variant="contained" color="primary" onClick={copyLinkToClipboard}>
+            Copy to Clipboard
+          </Button>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeCopyDialog} color="primary">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Snackbar
+        open={isSnackbarOpen}
+        autoHideDuration={3000}
+        onClose={() => setIsSnackbarOpen(false)}
+        message={`Link copied: ${copiedLink}`}
+      />
 
       <Footer />
     </>

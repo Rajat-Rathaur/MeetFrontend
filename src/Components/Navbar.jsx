@@ -7,13 +7,24 @@ import { Menu, MenuItem } from '@mui/material';
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-const handleMenuOpen = (event) => {
-  setAnchorEl(event.currentTarget);
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const [profileAnchorEl, setProfileAnchorEl] = React.useState(null);
+
+const handleProfileOpen = (event) => {
+  setProfileAnchorEl(event.currentTarget);
 };
 
-const handleMenuClose = () => {
-  setAnchorEl(null);
+const handleProfileClose = () => {
+  setProfileAnchorEl(null);
 };
+
 
   return (
     <AppBar position="static" sx={{ mb: 4 }}>
@@ -34,10 +45,30 @@ const handleMenuClose = () => {
             inputProps={{ 'aria-label': 'search' }}
           />
         </div>
-       
+
         <Button color="inherit" sx={{ ml: 1 }}>Meetings</Button>
         <Avatar alt="Profile Picture" src="/static/images/avatar/1.jpg" sx={{ ml: 2 }} />
-        <Typography variant="subtitle1" sx={{ ml: 1 }}>Username</Typography>
+        
+        <Typography
+          variant="subtitle1"
+          sx={{ ml: 1, cursor: 'pointer' }}
+          onClick={handleMenuOpen} // Add onClick handler here
+        >
+          Username
+        </Typography>
+
+        <Menu
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleMenuClose}
+        >
+          <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+          <MenuItem onClick={handleMenuClose}>Settings</MenuItem>
+          <MenuItem onClick={handleMenuClose}>Help</MenuItem>
+          <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+        </Menu>
+
       </Toolbar>
     </AppBar>
   );
