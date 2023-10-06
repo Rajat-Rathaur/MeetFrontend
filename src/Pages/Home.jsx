@@ -25,11 +25,21 @@ import SignInIcon from '@mui/icons-material/Login';
 import SignUpIcon from '@mui/icons-material/PersonAdd';
 import Footer from '../Components/Footer';
 
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
+import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt'
+
+
 const Home = () => {
+  const [roomCode, setRoomCode] = useState("")
   const [isJoinDialogOpen, setIsJoinDialogOpen] = useState(false);
   const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [copiedLink, setCopiedLink] = useState('');
+  const navigate = useNavigate();
+  const handleSubmit=(ev)=> {
+    ev.preventDefault();
+    navigate(`/room/${roomCode}`)
+  }
 
   const openJoinDialog = () => {
     setIsJoinDialogOpen(true);
@@ -54,6 +64,7 @@ const Home = () => {
       setIsSnackbarOpen(true);
     });
   };
+ 
 
   return (
     <>
@@ -151,13 +162,13 @@ const Home = () => {
         <DialogTitle>Join Meeting</DialogTitle>
         <DialogContent>
           <Typography>Enter Meeting ID:</Typography>
-          <InputBase placeholder="Meeting ID" />
+          <InputBase value={roomCode} onChange={(e)=>setRoomCode(e.target.value)} placeholder="Meeting ID" />
         </DialogContent>
         <DialogActions>
           <Button onClick={closeJoinDialog} color="primary">
             Cancel
           </Button>
-          <Button onClick={closeJoinDialog} color="primary">
+          <Button onClick={handleSubmit} color="primary">
             Join
           </Button>
         </DialogActions>
@@ -184,6 +195,7 @@ const Home = () => {
         onClose={() => setIsSnackbarOpen(false)}
         message={`Link copied: ${copiedLink}`}
       />
+        
 
       <Footer />
     </>

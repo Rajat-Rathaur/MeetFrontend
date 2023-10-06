@@ -6,6 +6,7 @@ import routes from './routes/routes';
 import './App.css'
 import Dashboard from './Components/Dashboard';
 import { CssBaseline } from '@mui/material';
+
 function App() {
 
 
@@ -14,6 +15,7 @@ function App() {
     <CssBaseline />
       {  <Router>
     {/*   <Dashboard/> */}
+    
       
       <Routes>
         {routes.map((route, index)=>(

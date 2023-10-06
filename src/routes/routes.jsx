@@ -2,7 +2,7 @@
 
 import Home from '../Pages/Home';
 import afterJoiningMeet from '../Pages/afterJoiningMeet';
-
+import index from '../Pages';
 
 const routes = [
     {
@@ -10,11 +10,12 @@ const routes = [
         component: Home,
         exact: true,
     },
-    {
-        path:'/afterJoiningMeet',
-        component : afterJoiningMeet,
+   
+     {
+        path:'/room/:roomId',
+        component:index
     }
-    
+     
 ];
 
 export default routes;

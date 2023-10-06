@@ -18,7 +18,10 @@ import { Box } from '@mui/material';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import SendIcon from '@mui/icons-material/Send';
-
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 
 
 import AttachFileIcon from '@mui/icons-material/AttachFile';
@@ -83,6 +86,16 @@ const afterJoiningMeet = () => {
         }
     };
 
+    const [isParticipantsOpen, setParticipantsOpen] = useState(false);
+    const [participants, setParticipants] = useState([
+        { name: 'John Doe', micOn: true },
+        { name: 'Jane Smith', micOff: false },
+        // ... add more participants for demonstration
+    ]);
+
+    const handleParticipantsToggle = () => {
+        setParticipantsOpen(!isParticipantsOpen);
+    };
 
 
     return (
@@ -137,11 +150,40 @@ const afterJoiningMeet = () => {
                         <IconButton color={theme.palette.mode === 'dark' ? 'primary' : 'inherit'} onClick={handleChatToggle}>
                             <ChatIcon />
                         </IconButton>
-                        <IconButton color={theme.palette.mode === 'dark' ? 'primary' : 'inherit'}>
+                        <IconButton color={theme.palette.mode === 'dark' ? 'primary' : 'inherit'} onClick={handleParticipantsToggle}>
                             <PeopleIcon />
                         </IconButton>
                         {/* Add more controls as needed */}
                     </div>
+                    <Drawer
+                        anchor="right"
+                        open={isParticipantsOpen}
+                        onClose={handleParticipantsToggle}
+                    >
+                        <div style={{ width: 250, height: '100%' }}>
+                            <AppBar position="static">
+                                <Toolbar>
+                                    <Typography variant="h6" style={{ flexGrow: 1 }}>
+                                        Participants
+                                    </Typography>
+                                    <IconButton edge="end" color="inherit" onClick={handleParticipantsToggle}>
+                                        <CloseIcon />
+                                    </IconButton>
+                                </Toolbar>
+                            </AppBar>
+
+                            <List>
+                                {participants.map((participant, index) => (
+                                    <ListItem key={index}>
+                                        <ListItemIcon>
+                                            {participant.micOn ? <MicIcon /> : <MicOffIcon />}
+                                        </ListItemIcon>
+                                        <ListItemText primary={participant.name} />
+                                    </ListItem>
+                                ))}
+                            </List>
+                        </div>
+                    </Drawer>
                     <Drawer
                         anchor="right"
                         open={isChatOpen}
@@ -161,12 +203,12 @@ const afterJoiningMeet = () => {
 
                             {/* Chat messages would go here */}
                             <div style={{ overflowY: 'auto', flexGrow: 1, padding: 10 }}>
-                                    {messages.map((msg, index) => (
-                                        <div key={index} style={{ marginBottom: 10 }}>
-                                            {msg}
-                                        </div>
-                                    ))}
-                                </div>
+                                {messages.map((msg, index) => (
+                                    <div key={index} style={{ marginBottom: 10 }}>
+                                        {msg}
+                                    </div>
+                                ))}
+                            </div>
 
                             <div style={{ padding: 10, marginTop: 'auto', display: 'flex', alignItems: 'center' }}>
                                 <IconButton>
@@ -176,7 +218,7 @@ const afterJoiningMeet = () => {
                                     <AttachFileIcon />
                                     <input type="file" hidden onChange={handleFileUpload} />
                                 </IconButton>
-                               
+
                                 <TextField
                                     variant="outlined"
                                     fullWidth
@@ -190,9 +232,9 @@ const afterJoiningMeet = () => {
                                 </IconButton>
                             </div>
                         </div>
-                        
+
                     </Drawer>
-                    
+
                 </div>
             </Box>
             <Dialog
